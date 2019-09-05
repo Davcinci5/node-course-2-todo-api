@@ -1,6 +1,6 @@
 
 //const MongoClient = require('mongodb').MongoClient;
-const {MongoClient, ObjectID} = require('mongodb');
+//const {MongoClient, ObjectID} = require('mongodb');
 var obj = new ObjectID();
 
 MongoClient.connect('mongodb://localhost:27017/TodoAppTest', (err, client) => {
@@ -11,10 +11,19 @@ MongoClient.connect('mongodb://localhost:27017/TodoAppTest', (err, client) => {
    
         const db = client.db('TodoApp');
         
-        //The find method
+       //using count method
 
-        // db.collection('Todos').find().toArray().then((docs) => { //db.collection('Todos').find({completed: false}).toArray().then((docs) => {
-            db.collection('Todos').find({
+       //db.collection('Todos').find({}).count().then((count) => {
+       
+        //The find method
+         //print out all the elements
+        // db.collection('Todos').find().toArray().then((docs) => { 
+        
+        //print out a specific element
+        //db.collection('Todos').find({completed: false}).toArray().then((docs) => {
+        
+        //printo out an element  using new ObjectId
+        db.collection('Todos').find({
                 _id: new ObjectID("5d6ea30449372d459131753b")
                }).toArray().then((docs) => {    
             console.log('Todos');
