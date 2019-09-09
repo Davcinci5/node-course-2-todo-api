@@ -4,21 +4,41 @@ const request = require('supertest');
 const {app} = require('../server');
 const {Todo} = require('../models/todo');
 
+const todos = [{
+    text: 'First test todo'
+   },{
+    text: 'Second test todo'
+   }];
+   
 
 
 
-// function that makes sure the database is empty.
-beforeEach((done) => {
+   beforeEach((done) => {
     Todo.remove({}).then(() => {
-        done();
+    return Todo.insertMany(todos);
+    }).then(() => done());
+   });
+   
+
+ //
+ 
+ describe('GET /todos', () => {
+    it('should get all todos', (done) => {
+    request(app)
+    .get('/todos')
+    .expect(200)
+    .expect((res) => {
+    expect(res.body.todos.length).toBe(2);
     })
+    .end(done);
+   })
 });
 
 //Adding describe block for the test cases
 describe('POST /todos', () => {
     it('should create a new todo',(done) => {
         //start laying out our test cases
-        var text = 'Test todo text sleeping';
+        var text = 'Test todo text';
 
         request(app)
         .post('/todos')
@@ -40,7 +60,7 @@ describe('POST /todos', () => {
 
             //Making a request to fetch the Todos from the database
                 
-            Todo.find().then((todos) => {
+            Todo.find({text}).then((todos) => {
                 //function evaluates the length of todos 
                 // and expects to be 1
                 expect(todos.length).toBe(1);
@@ -66,11 +86,12 @@ describe('POST /todos', () => {
             }
 
             Todo.find().then((todos) => {
-                expect(todos.length).toBe(0);
+                expect(todos.length).toBe(2);
                 done();
                }).catch((e) => done(e));
         });
     });
 });
    
+
    
